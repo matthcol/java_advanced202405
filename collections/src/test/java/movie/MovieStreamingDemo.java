@@ -2,6 +2,7 @@ package movie;
 
 import csv.CsvPerson;
 import csv.CsvUtils;
+import data.Person;
 import io.FilePathResourceUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,10 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.MessageFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -130,8 +128,40 @@ class MovieStreamingDemo {
                     int birthYear = ((LocalDate) mapInfo.get("birthdate")).getYear();
                     return (startYear <= birthYear) && (birthYear <= endYear);
                 })
-                .collect(Collectors.groupingBy(mapInfo -> ((LocalDate) mapInfo.get("birthdate")).getYear()));
-        System.out.println(result);
+                // .collect(Collectors.groupingBy(mapInfo -> ((LocalDate) mapInfo.get("birthdate")).getYear())); // => HashMap
+                .collect(Collectors.groupingBy(
+                        mapInfo ->  ((LocalDate) mapInfo.get("birthdate")).getYear(),
+                        TreeMap::new, // i.e. () -> new TreeMap<Integer, List<Map<String, Object>>>()
+                        Collectors.toList()
+                ));
+        result.forEach((year, listPerson) -> {
+            System.out.println("Born in " +  year + " :");
+            listPerson.forEach(person -> System.out.println("\t- " + person));
+        });
+    }
+
+    @Test
+    void demoPersonBornByYear2(){
+        // group by year in the 30s
+        int startYear = 1930;
+        int endYear = 1939;
+        var result = personLines.stream()
+                .map(CsvPerson::lineToPerson)
+                .filter(person -> person.bornBetweenYears(startYear, endYear))
+                .collect(Collectors.groupingBy(
+                        Person::getBirthYear,
+                        TreeMap::new,
+                        Collectors.toList()
+                ));
+        result.forEach((year, listPerson) -> {
+            System.out.println("Born in " +  year + " :");
+            listPerson.forEach(person -> System.out.println("\t- " + person));
+        });
     }
 
 }
+
+
+
+
+

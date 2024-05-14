@@ -32,4 +32,26 @@ class CsvPersonTest {
         assertEquals(1, id, "id");
         assertEquals("Fred Astaire", name, "name");
     }
+
+    @Test
+    void testLineToPerson_birthdatePresent() {
+        String line = "1\tFred Astaire\t1899-05-10";
+        var person = CsvPerson.lineToPerson(line);
+        assertAll(
+                () -> assertEquals(1, person.getId(), "id"),
+                () -> assertEquals("Fred Astaire", person.getName(), "name"),
+                () -> assertEquals(LocalDate.of(1899,5,10), person.getBirthdate(), "birthdate")
+        );
+    }
+
+    @Test
+    void testLineToPerson_birthdateAbsent() {
+        String line = "1\tFred Astaire\t";
+        var person = CsvPerson.lineToPerson(line);
+        assertAll(
+                () -> assertEquals(1, person.getId(), "id"),
+                () -> assertEquals("Fred Astaire", person.getName(), "name"),
+                () -> assertNull(person.getBirthdate(), "birthdate")
+        );
+    }
 }
