@@ -1,5 +1,6 @@
 package movie;
 
+import csv.CsvPerson;
 import csv.CsvUtils;
 import io.FilePathResourceUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -103,6 +104,34 @@ class MovieStreamingDemo {
                 infoMap.get("name"),
                 infoMap.get("birthdate")
         ));
+    }
+
+    @Test
+    void demoPersonBornIn(){
+        // collect result into a list and display it
+        int year = 1930;
+        var personBornThisYear = personLines.stream()
+                .map(CsvPerson::lineToInfoMap)
+                .filter(mapInfo -> mapInfo.containsKey("birthdate"))
+                .filter(mapInfo -> ((LocalDate) mapInfo.get("birthdate")).getYear() == year)
+                .toList();
+        personBornThisYear.forEach(System.out::println);
+    }
+
+    @Test
+    void demoPersonBornByYear(){
+        // group by year in the 30s
+        int startYear = 1930;
+        int endYear = 1939;
+        var result = personLines.stream()
+                .map(CsvPerson::lineToInfoMap)
+                .filter(mapInfo -> mapInfo.containsKey("birthdate"))
+                .filter(mapInfo -> {
+                    int birthYear = ((LocalDate) mapInfo.get("birthdate")).getYear();
+                    return (startYear <= birthYear) && (birthYear <= endYear);
+                })
+                .collect(Collectors.groupingBy(mapInfo -> ((LocalDate) mapInfo.get("birthdate")).getYear()));
+        System.out.println(result);
     }
 
 }
