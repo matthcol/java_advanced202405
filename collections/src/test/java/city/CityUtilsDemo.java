@@ -12,4 +12,4 @@ class CityUtilsDemo {
         System.out.println(cities);
     }
 
-}:wq
+}
