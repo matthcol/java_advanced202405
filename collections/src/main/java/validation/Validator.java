@@ -17,7 +17,7 @@ public class Validator {
 
     public static boolean isValid(Object object){
         // get object type
-        var objectClass = object.getClass();
+        Class<?> objectClass = object.getClass();
 
         // get validation annotations on fields
         // filter annotation (package = validation)
