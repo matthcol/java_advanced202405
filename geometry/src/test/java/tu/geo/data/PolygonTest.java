@@ -49,7 +49,17 @@ class PolygonTest {
         assertEquals(expectedSurface, actualSurface);
     }
 
-    @Test
-    void testPerimeter() {
+    static Stream<Arguments> perimeterFixture(){
+        return Stream.of(
+                Arguments.of(Named.of("pentagon Wikipedia", pentagon), 24.30799514569929),
+                Arguments.of(Named.of("triangle 345",triangle345), 12.0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("perimeterFixture")
+    void testPerimeter(Polygon polygon, double expectedPerimeter) {
+        double actualPerimeter = polygon.perimeter();
+        assertEquals(expectedPerimeter, actualPerimeter, 1E-15);
     }
 }

@@ -28,7 +28,14 @@ public class Polygon extends Shape implements Mesurable2D {
 
     @Override
     public double surface() {
-        return 0;
+        // Shoelace formula: https://en.wikipedia.org/wiki/Shoelace_formula
+        double res = 0.0;
+        Point prec = vertices.getLast();
+        for (Point next: vertices){
+            res += prec.getX() * next.getY() - prec.getY() * next.getX();
+            prec = next;
+        }
+        return Math.abs(res) / 2.0;
     }
 
     @Override
