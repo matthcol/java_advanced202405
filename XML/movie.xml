@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<movie id="1" title="Dune: Part Two" year="2024">
+    <director name="Denis Villeneuve" />
+    <actors>
+        <actor name="Thimothée Chalamet" />
+        <actor name="Zendaya" />
+    </actors>
+</movie>
